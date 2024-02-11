@@ -18,7 +18,7 @@ char	*get_next_line(int fd)
 	char		*buffer;
 	int			readed;
 
-	if (BUFFER_SIZE <= 0 || fd >= OPEN_MAX)
+	if (BUFFER_SIZE <= 0 || fd >= OPEN_MAX || fd < 0)
 		return (NULL);
 	while (1)
 	{
