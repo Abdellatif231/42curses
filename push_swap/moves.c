@@ -6,7 +6,7 @@
 /*   By: amaaouni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/22 17:55:44 by amaaouni          #+#    #+#             */
-/*   Updated: 2024/05/23 18:42:42 by amaaouni         ###   ########.fr       */
+/*   Updated: 2024/05/26 15:34:39 by amaaouni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,8 @@ void	swap(int *a, int size)
 
 void	push(int *from, int *to, int *from_size, int *to_size)
 {
+	if (!*from_size)
+		return ;
 	to[*to_size] = from[0];
 	(*to_size)++;
 	rotate(from, *from_size);
@@ -74,6 +76,8 @@ void	push(int *from, int *to, int *from_size, int *to_size)
 
 void	rrr(int *a, int size_a, int *b, int size_b)
 {
+	if (size_a < 2 && size_b < 2)
+		return ;
 	rev_rotate(a, size_a);
 	rev_rotate(b, size_b);
 	write(1, "rrr\n", 4);
