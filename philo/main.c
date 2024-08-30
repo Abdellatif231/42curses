@@ -1,8 +1,19 @@
 #include "philo.h"
 
+void	*routine(void *arg)
+{
+	t_table *table = (t_table *)arg;
+	pthread_mutex_lock(&table->id);
+	(table->philos.id)++;
+	printf("philo id -> %d\n", table->philos.id);
+	pthread_mutex_unlock(&table->id);
+	return NULL;
+}
+
 int	main(int ac, char **av)
 {
 	t_table	table;
+	int	i;
 
 	if ((ac != 5 && ac != 6) || !check_arg(ac, av))
 	{
@@ -15,6 +26,19 @@ int	main(int ac, char **av)
 	table.sleep_time = to_int(av[4]);
 	if (ac == 6)
 		table.num_meals = to_int(av[5]);
-	printf("%d\n", table.num_philo);
+	pthread_mutex_init(&table.id, NULL);
+	i = 0;
+	table.philos.id = 0;
+	while (i < table.num_philo)
+	{
+		pthread_create(&table.philos.thread, NULL, routine, &table);
+		i++;
+	}
+	i = 0;
+	while (i < table.num_philo)
+	{
+		pthread_join(table.philos.thread, NULL);
+		i++;
+	}
 	return 0;
 }

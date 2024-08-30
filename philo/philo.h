@@ -22,6 +22,7 @@ typedef struct	s_table {
     int		sleep_time;
     int		num_meals;
     mutex_t	*forks;
+    mutex_t	id;
     t_philo	philos;
 }		t_table;
 
