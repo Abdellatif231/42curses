@@ -1,12 +1,14 @@
 #include "philo.h"
 
+void	think(t_table *data)
+{
+	printf("%d : is thinking\n", data->philos->id);
+}
+
 void	*routine(void *arg)
 {
 	t_table *table = (t_table *)arg;
-	pthread_mutex_lock(&table->id);
-	(table->philos.id)++;
-	printf("philo id -> %d\n", table->philos.id);
-	pthread_mutex_unlock(&table->id);
+	think(table);
 	return NULL;
 }
 
@@ -26,18 +28,20 @@ int	main(int ac, char **av)
 	table.sleep_time = to_int(av[4]);
 	if (ac == 6)
 		table.num_meals = to_int(av[5]);
-	pthread_mutex_init(&table.id, NULL);
+	table.philos = malloc(sizeof(t_philo) * table.num_philo);
+
 	i = 0;
-	table.philos.id = 0;
+	table.philos->id = 0;
 	while (i < table.num_philo)
 	{
-		pthread_create(&table.philos.thread, NULL, routine, &table);
+		table.philos->id = i + 1;
+		pthread_create(&table.philos[i].thread, NULL, routine, &table);
 		i++;
 	}
 	i = 0;
 	while (i < table.num_philo)
 	{
-		pthread_join(table.philos.thread, NULL);
+		pthread_join(table.philos->thread, NULL);
 		i++;
 	}
 	return 0;
