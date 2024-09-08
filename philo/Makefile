@@ -1,6 +1,6 @@
 CC = cc
 CFLAGS = -Wall -Wextra -Werror -fsanitize=address -g
-CFILES = main.c parssing.c
+CFILES = main.c parssing.c utils.c
 OFILES = $(CFILES:.c=.o)
 
 all: $(OFILES)
@@ -12,6 +12,7 @@ all: $(OFILES)
 clean:
 	rm -rf $(OFILES)
 
-fclean:
-	make clean
+fclean: clean
 	rm -rf philo
+
+re: fclean all
