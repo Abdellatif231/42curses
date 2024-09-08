@@ -2,6 +2,7 @@
 
 void	print(const char *s, t_philo *philo)
 {
+	// check if any of them died and mutex it before u do
 	pthread_mutex_lock(&philo->table->print);
 	printf("%lu : %d %s\n", get_current_time() - philo->table->start, philo->id, s);
 	pthread_mutex_unlock(&philo->table->print);
@@ -85,6 +86,7 @@ int	main(int ac, char **av)
 		pthread_create(&table.philo[i].thread, NULL, routine, &table.philo[i]);
 		i++;
 	}
+	// check here if any of them died by running a loop through all of them
 	i = 0;
 	while (i < table.num_philo)
 	{
