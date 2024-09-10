@@ -13,7 +13,7 @@ typedef struct s_table	t_table;
 typedef struct	s_philo {
     int		id;
     int		meals;
-    long	last_meal_time;
+    size_t	last_meal_time;
     int		left_fork;
     int		right_fork;
     pthread_t	thread;
@@ -22,9 +22,9 @@ typedef struct	s_philo {
 
 typedef struct	s_table {
     int		num_philo;
-    int		die_time;
-    int		eat_time;
-    int		sleep_time;
+    size_t	die_time;
+    size_t	eat_time;
+    size_t	sleep_time;
     int		num_meals;
 	long	start;
 	int		dead;
@@ -34,9 +34,14 @@ typedef struct	s_table {
     t_philo	*philo;
 }		t_table;
 
-int	check_arg(int ac, char **av);
-int	to_int(char *str);
-int ft_usleep(size_t milliseconds);
+int		check_arg(int ac, char **av);
+int		to_int(char *str);
+int		ft_usleep(size_t milliseconds);
 size_t  get_current_time(void);
+void    print(const char *s, t_philo *philo);
+void    eating(t_philo *philo);
+void    sleeping(t_philo *philo);
+void    thinking(t_philo *philo);
+void    *routine(void *arg);
 
 #endif
