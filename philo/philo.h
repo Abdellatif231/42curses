@@ -11,14 +11,14 @@ typedef pthread_mutex_t mutex_t;
 typedef struct s_table	t_table;
 
 typedef struct	s_philo {
-    int		id;
-    int		meals;
-    size_t	last_meal_time;
-    int		left_fork;
-    int		right_fork;
+    int			id;
+    int			meals;
+    size_t		last_meal_time;
+    int			left_fork;
+    int			right_fork;
     pthread_t	thread;
 	t_table		*table;
-}		t_philo;
+}				t_philo;
 
 typedef struct	s_table {
     int		num_philo;
@@ -28,11 +28,12 @@ typedef struct	s_table {
     int		num_meals;
 	long	start;
 	int		dead;
-	mutex_t	died;
-    mutex_t	*forks;
+	mutex_t	death;
 	mutex_t	print;
+	mutex_t	last_meal;
+	mutex_t	*forks;
     t_philo	*philo;
-}		t_table;
+}			t_table;
 
 int		check_arg(int ac, char **av);
 int		to_int(char *str);
@@ -43,5 +44,13 @@ void    eating(t_philo *philo);
 void    sleeping(t_philo *philo);
 void    thinking(t_philo *philo);
 void    *routine(void *arg);
+void    clear(t_table *table);
+void    create_threads(t_table *table);
+int 	philo_init(t_table *table);
+void    table_init(t_table *table, int ac, char **av);
+int		get_dead(t_table *table);
+void    set_dead(t_table *table);
+void    set_last_meal(t_philo *philo);
+void    death_checker(t_table *table);
 
 #endif
