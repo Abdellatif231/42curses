@@ -91,7 +91,7 @@ int	main(int ac, char **av)
 	if (!philo_init(&table))
 		return 1;
 	create_threads(&table);
-	int	i;
+/*	int	i;
 
 	while (!table.dead)
 	{
@@ -107,7 +107,7 @@ int	main(int ac, char **av)
 			pthread_mutex_unlock(&table.died);
 			i++;
 		}
-	}
+	}*/
 	clear(&table);
 	return 0;
 }

@@ -6,7 +6,7 @@
 /*   By: amaaouni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 23:23:18 by amaaouni          #+#    #+#             */
-/*   Updated: 2024/09/10 00:53:08 by amaaouni         ###   ########.fr       */
+/*   Updated: 2024/09/10 01:38:58 by amaaouni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 void    print(const char *s, t_philo *philo)
 {
     pthread_mutex_lock(&philo->table->print);
-	if (!philo->table->dead)
+//	if (!philo->table->dead)
 		printf("%lu : %d %s\n", get_current_time() - philo->table->start, philo->id, s);
     pthread_mutex_unlock(&philo->table->print);
 }
@@ -50,13 +50,13 @@ void    *routine(void *arg)
         sleeping(philo);
     while (1)
     {
-		pthread_mutex_lock(&philo->table->died);
+/*		pthread_mutex_lock(&philo->table->died);
 		if (philo->table->dead)
 		{
 			pthread_mutex_unlock(&philo->table->died);
 			break;
 		}
-		pthread_mutex_unlock(&philo->table->died);
+		pthread_mutex_unlock(&philo->table->died);*/
         eating(philo);
         thinking(philo);
         sleeping(philo);
