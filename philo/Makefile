@@ -1,5 +1,5 @@
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -fsanitize=thread -g
+CFLAGS = -Wall -Wextra -Werror -pthread -fsanitize=thread -g
 CFILES = main.c parssing.c utils.c utils_I.c
 OFILES = $(CFILES:.c=.o)
 

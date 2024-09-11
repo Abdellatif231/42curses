@@ -6,7 +6,7 @@
 /*   By: amaaouni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 23:23:18 by amaaouni          #+#    #+#             */
-/*   Updated: 2024/09/11 00:43:52 by amaaouni         ###   ########.fr       */
+/*   Updated: 2024/09/11 02:35:38 by amaaouni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ void    eating(t_philo *philo)
     print("is eating", philo);
 	set_last_meal(philo);
     ft_usleep(philo->table->eat_time);
+	set_meals(philo);
     pthread_mutex_unlock(&philo->table->forks[philo->right_fork - 1]);
     pthread_mutex_unlock(&philo->table->forks[philo->left_fork - 1]);
 }
@@ -35,11 +36,14 @@ void    eating(t_philo *philo)
 void    *routine(void *arg)
 {
     t_philo *philo = (t_philo *)arg;
+
+	if (philo->table->num_philo == 1)
+		return NULL;
     if (philo->id % 2 == 0)
-		usleep(200);
+		usleep(50);
     while (1)
     {
-		if (get_dead(philo->table))
+		if (get_dead(philo->table)) //|| !get_full(philo->table))
 			break;
         eating(philo);
         thinking(philo);

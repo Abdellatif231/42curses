@@ -6,7 +6,7 @@
 /*   By: amaaouni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/10 21:02:03 by amaaouni          #+#    #+#             */
-/*   Updated: 2024/09/11 00:37:08 by amaaouni         ###   ########.fr       */
+/*   Updated: 2024/09/11 02:35:26 by amaaouni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,48 @@ void	set_last_meal(t_philo *philo)
 	pthread_mutex_unlock(&philo->table->last_meal);
 }
 
+size_t	get_last_meal(t_philo *philo)
+{
+	size_t	meal_time;
+	pthread_mutex_lock(&philo->table->last_meal);
+	meal_time = philo->last_meal_time;
+	pthread_mutex_unlock(&philo->table->last_meal);
+	return meal_time;
+}
+
+void	set_meals(t_philo *philo)
+{
+	pthread_mutex_lock(&philo->table->meals_lock);
+	philo->meals++;
+	pthread_mutex_unlock(&philo->table->meals_lock);
+}
+
+int	get_meals(t_philo *philo)
+{
+	int	meals;
+    pthread_mutex_lock(&philo->table->meals_lock);
+    meals = philo->meals;
+    pthread_mutex_unlock(&philo->table->meals_lock);
+	return meals;
+}
+
+int	get_full(t_table *table)
+{
+	int full;
+
+    pthread_mutex_lock(&table->full_lock);
+    full = table->full;
+    pthread_mutex_unlock(&table->full_lock);
+	return full;
+}
+
+void	set_full(t_table *table)
+{
+	pthread_mutex_lock(&table->full_lock);
+	table->full = 1;
+	pthread_mutex_unlock(&table->full_lock);
+}
+
 void	death_checker(t_table *table)
 {
 
@@ -45,17 +87,19 @@ void	death_checker(t_table *table)
 		i = 0;
 		while (i < table->num_philo)
 		{
-			pthread_mutex_lock(&table->last_meal);
-			if (get_current_time() - table->philo[i].last_meal_time >= table->die_time)
+			if (get_current_time() - get_last_meal(&table->philo[i]) >= table->die_time)
 			{
 				print("died", &table->philo[i]);
 				set_dead(table);
-				pthread_mutex_unlock(&table->last_meal);
 				break;
 			}
-			pthread_mutex_unlock(&table->last_meal);
+	//		if (get_meals(&table->philo[i]) < table->num_meals)
+	//			set_full(table);
 			i++;
 		}
+	//	if (!get_full(table))
+	//		break;
+		usleep(50);
 	}
 }
 

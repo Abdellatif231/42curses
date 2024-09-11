@@ -6,7 +6,7 @@
 /*   By: amaaouni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/06 21:48:06 by amaaouni          #+#    #+#             */
-/*   Updated: 2024/09/11 00:23:05 by amaaouni         ###   ########.fr       */
+/*   Updated: 2024/09/11 02:24:55 by amaaouni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ void    thinking(t_philo *philo)
 void    table_init(t_table *table, int ac, char **av)
 {
     table->dead = 0;
+	table->full = 0;
     table->num_philo = to_int(av[1]);
     table->die_time = to_int(av[2]);
     table->eat_time = to_int(av[3]);
@@ -54,9 +55,14 @@ void    table_init(t_table *table, int ac, char **av)
         table->num_meals = to_int(av[5]);
     else
         table->num_meals = -1;
+	printf("time to die %zu\n", table->die_time);
+	printf("time to eat %zu\n", table->eat_time);
+	printf("time to sleep %zu\n", table->sleep_time);
     pthread_mutex_init(&table->print, NULL);
     pthread_mutex_init(&table->death, NULL);
 	pthread_mutex_init(&table->last_meal, NULL);
+	pthread_mutex_init(&table->meals_lock, NULL);
+	pthread_mutex_init(&table->full_lock, NULL);
 }
 
 int philo_init(t_table *table)
@@ -77,7 +83,7 @@ int philo_init(t_table *table)
     {
         table->philo[i].id = i + 1;
         table->philo[i].meals = 0;
-        table->philo[i].last_meal_time = table->start;
+        table->philo[i].last_meal_time = table->start;;
         if (i + 1 == table->num_philo)
             table->philo[i].left_fork = 1;
         else
@@ -121,6 +127,8 @@ void    clear(t_table *table)
     pthread_mutex_destroy(&table->print);
     pthread_mutex_destroy(&table->death);
 	pthread_mutex_destroy(&table->last_meal);
+	pthread_mutex_destroy(&table->meals_lock);
+	pthread_mutex_destroy(&table->full_lock);
     free(table->philo);
     free(table->forks);
 }

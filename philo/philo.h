@@ -28,9 +28,12 @@ typedef struct	s_table {
     int		num_meals;
 	long	start;
 	int		dead;
+	int		full;
 	mutex_t	death;
 	mutex_t	print;
 	mutex_t	last_meal;
+	mutex_t	meals_lock;
+	mutex_t	full_lock;
 	mutex_t	*forks;
     t_philo	*philo;
 }			t_table;
@@ -52,5 +55,9 @@ int		get_dead(t_table *table);
 void    set_dead(t_table *table);
 void    set_last_meal(t_philo *philo);
 void    death_checker(t_table *table);
+void    set_meals(t_philo *philo);
+int		get_meals(t_philo *philo);
+void    set_full(t_table *table);
+int		get_full(t_table *table);
 
 #endif
