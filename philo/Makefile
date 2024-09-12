@@ -1,11 +1,10 @@
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -pthread -fsanitize=thread -g
-CFILES = main.c parssing.c utils.c utils_I.c
+CFLAGS = -Wall -Wextra -Werror -pthread
+CFILES = main.c parssing.c utils.c routine.c setters.c check_death.c getters.c
 OFILES = $(CFILES:.c=.o)
 
 all: $(OFILES)
 	$(CC) $(CFLAGS) $(OFILES) -o philo
-	make clean
 
 %.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@
