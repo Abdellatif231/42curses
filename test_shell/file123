@@ -1,0 +1,48 @@
+leaks Report Version: 4.0
+Process 13585: 488 nodes malloced for 224 KB
+Process 13585: 37 leaks for 912 total leaked bytes.
+
+    37 (912 bytes) << TOTAL >>
+
+      9 (224 bytes) ROOT LEAK: 0x7f8bcac12c50 [32]
+         4 (96 bytes) 0x7f8bcac12c70 [32]
+            2 (48 bytes) 0x7f8bcac12c90 [32]
+               1 (16 bytes) 0x7f8bcac12cb0 [16]  length: 2  "gf"
+            1 (16 bytes) 0x7f8bcac12b90 [16]  length: 2  "ls"
+         4 (96 bytes) 0x7f8bcac12cc0 [32]
+            2 (48 bytes) 0x7f8bcac12cf0 [32]
+               1 (16 bytes) 0x7f8bcac12d10 [16]  length: 7  "file123"
+            1 (16 bytes) 0x7f8bcac12ce0 [16]  length: 3  "cat"
+
+      9 (224 bytes) ROOT LEAK: 0x7f8bcae042b0 [32]
+         4 (96 bytes) 0x7f8bcae042d0 [32]
+            2 (48 bytes) 0x7f8bcae042f0 [32]
+               1 (16 bytes) 0x7f8bcae04220 [16]  length: 2  "gf"
+            1 (16 bytes) 0x7f8bcae041e0 [16]  length: 2  "ls"
+         4 (96 bytes) 0x7f8bcae04310 [32]
+            2 (48 bytes) 0x7f8bcae04340 [32]
+               1 (16 bytes) 0x7f8bcae04360 [16]  length: 7  "file123"
+            1 (16 bytes) 0x7f8bcae04330 [16]  length: 3  "cat"
+
+      7 (176 bytes) ROOT LEAK: 0x7f8bcac13a30 [32]
+         6 (144 bytes) 0x7f8bcac13a50 [32]
+            4 (96 bytes) 0x7f8bcac13a70 [32]
+               2 (48 bytes) 0x7f8bcac13a90 [32]
+                  1 (16 bytes) 0x7f8bcac139c0 [16]  length: 7  "file123"
+               1 (16 bytes) 0x7f8bcac139b0 [16]  length: 1  ">"
+            1 (16 bytes) 0x7f8bcac139a0 [16]  length: 3  "cat"
+
+      6 (144 bytes) ROOT LEAK: 0x7f8bcac12bf0 [32]
+         4 (96 bytes) 0x7f8bcac12c10 [32]
+            2 (48 bytes) 0x7f8bcac12c30 [32]
+               1 (16 bytes) 0x7f8bcac12b80 [16]  length: 7  "file123"
+            1 (16 bytes) 0x7f8bcac12b70 [16]  length: 3  "cat"
+         1 (16 bytes) 0x7f8bcac12b60 [16]  length: 1  "|"
+
+      6 (144 bytes) ROOT LEAK: 0x7f8bcae04250 [32]
+         4 (96 bytes) 0x7f8bcae04270 [32]
+            2 (48 bytes) 0x7f8bcae04290 [32]
+               1 (16 bytes) 0x7f8bcae041d0 [16]  length: 7  "file123"
+            1 (16 bytes) 0x7f8bcae041c0 [16]  length: 3  "cat"
+         1 (16 bytes) 0x7f8bcae041b0 [16]  length: 1  "|"
+
