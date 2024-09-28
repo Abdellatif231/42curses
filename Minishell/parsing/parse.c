@@ -23,6 +23,7 @@ t_tree		*parse(t_token *tokens)
     }
     if (pipe_operator)
     {
+        //the leak is here in the split_tokens
         root = create_operator_node(pipe_operator);
         root->left = parse(split_tokens(tokens, pipe_operator));
         root->right = parse(pipe_operator->next);
@@ -80,6 +81,8 @@ t_token *split_tokens(t_token *tokens, t_token *operator_token)
 
     while(current && current->next != operator_token)
         current = current->next;
+    // when you find the pipe you recursivly set the next to NULL
+    // which results to tokens point only to the last node before the pipe
     if (current)
         current->next = NULL;
     return (tokens);
