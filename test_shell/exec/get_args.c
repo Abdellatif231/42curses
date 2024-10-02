@@ -6,7 +6,7 @@
 /*   By: amaaouni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 05:14:10 by amaaouni          #+#    #+#             */
-/*   Updated: 2024/09/26 05:27:43 by amaaouni         ###   ########.fr       */
+/*   Updated: 2024/10/02 06:35:47 by amaaouni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ char	**filter_arg(char **arg)
 	return (filtered_arg);
 }
 
-char	**generate_arg(t_tree *root, char **env)
+char	**generate_arg(t_tree *root)
 {
 	t_tree	*dup_root;
 	char	**arg;

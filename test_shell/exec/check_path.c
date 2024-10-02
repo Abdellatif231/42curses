@@ -6,7 +6,7 @@
 /*   By: amaaouni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/22 07:37:03 by amaaouni          #+#    #+#             */
-/*   Updated: 2024/09/27 06:17:02 by amaaouni         ###   ########.fr       */
+/*   Updated: 2024/10/02 09:47:05 by amaaouni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,18 +26,18 @@ int	free_split(char **arr)
 	return (1);
 }
 
-char	*find_path(char *ev[])
+char *find_path(t_env *env_list)
 {
-	char	*path;
+    char *path;
 
-	while (*ev)
-	{
-		path = ft_strnstr(*ev, "PATH=", 5);
-		if (path)
-			return (path);
-		ev++;
-	}
-	return (NULL);
+    while (env_list)
+    {
+        path = ft_strnstr(env_list->env_line, "PATH=", 5);
+        if (path)
+            return path;
+        env_list = env_list->next;
+    }
+    return NULL;
 }
 
 char	*no_path(char *cmd)
@@ -55,7 +55,7 @@ char	*no_cmd(t_path *va, char *cmd)
 	return (NULL);
 }
 
-char	*check_path(char *cmd, char *ev[])
+char	*check_path(char *cmd, t_env *ev)
 {
 	t_path	path_info;
 

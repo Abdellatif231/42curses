@@ -6,7 +6,7 @@
 /*   By: bbelarra42 <bbelarra@student.1337.ma>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 10:12:34 by bbelarra42        #+#    #+#             */
-/*   Updated: 2024/09/27 13:37:58 by bbelarra42       ###   ########.fr       */
+/*   Updated: 2024/10/02 06:30:23 by amaaouni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,5 +143,5 @@ char				**commands_spliter(char const *s, char c);
 int					ft_strcmp(const char *str1, const char *str2);
 char				*ft_strdup(const char *str);
 
-void				exec(t_tree *root, char **env);
+void				exec(t_tree *root, t_env*env);
 #endif

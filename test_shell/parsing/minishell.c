@@ -6,7 +6,7 @@
 /*   By: bbelarra42 <bbelarra@student.1337.ma>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 10:15:05 by bbelarra42        #+#    #+#             */
-/*   Updated: 2024/10/01 12:46:40 by amaaouni         ###   ########.fr       */
+/*   Updated: 2024/10/02 09:15:41 by amaaouni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,8 +73,9 @@ void	parsing_entry(char *parse_string, t_env *env)
 	content_trima(head);
 	// heredoc(head);
 	root = parse(head);
+
 	// print_tree(root, 0);
-	exec(root, );
+	exec(root, env);
 	// link_free(head);
 }
 
