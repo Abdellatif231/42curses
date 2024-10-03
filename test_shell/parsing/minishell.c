@@ -6,7 +6,7 @@
 /*   By: bbelarra42 <bbelarra@student.1337.ma>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 10:15:05 by bbelarra42        #+#    #+#             */
-/*   Updated: 2024/10/02 09:15:41 by amaaouni         ###   ########.fr       */
+/*   Updated: 2024/10/03 13:29:12 by amaaouni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int	main(int ac, char *av[], char *env[])
 
 	our_env = env_dup(env);
 	while (1)
-		parsing_entry(readline("0xhb_shell$ "), our_env);
+		parsing_entry(readline("0xhb_shell$ "), &our_env);
 }
 
 void	heredoc(t_token *head)
@@ -53,7 +53,7 @@ void	heredoc(t_token *head)
 	}
 }
 
-void	parsing_entry(char *parse_string, t_env *env)
+void	parsing_entry(char *parse_string, t_env **env)
 {
 	t_token	*head;
 	t_tree	*root;
@@ -69,12 +69,12 @@ void	parsing_entry(char *parse_string, t_env *env)
 	}
 	organized_input = input_organizer(parse_string);
 	head = lexer(organized_input);
-	expand_flager(head, env);
+//	expand_flager(head, env);
 	content_trima(head);
 	// heredoc(head);
 	root = parse(head);
 
-	// print_tree(root, 0);
+//	print_tree(root, 0);
 	exec(root, env);
 	// link_free(head);
 }

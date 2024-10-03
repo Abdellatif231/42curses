@@ -6,7 +6,7 @@
 /*   By: bbelarra42 <bbelarra@student.1337.ma>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 10:12:34 by bbelarra42        #+#    #+#             */
-/*   Updated: 2024/10/02 06:30:23 by amaaouni         ###   ########.fr       */
+/*   Updated: 2024/10/03 13:35:46 by amaaouni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,7 +130,7 @@ char				*operation_returner(char *word, int i_word);
 int					word_count(char **string);
 char				**appender(char **string, int delimiter, int i_word);
 char				**input_organizer(char *parse_string);
-void				parsing_entry(char *parse_string, t_env *env);
+void				parsing_entry(char *parse_string, t_env **env);
 int					ft_strlen(const char *string);
 int					syntax_checker(char *parse_string);
 int					quotes_red_checker(char *string);
@@ -143,5 +143,5 @@ char				**commands_spliter(char const *s, char c);
 int					ft_strcmp(const char *str1, const char *str2);
 char				*ft_strdup(const char *str);
 
-void				exec(t_tree *root, t_env*env);
+void				exec(t_tree *root, t_env **env);
 #endif

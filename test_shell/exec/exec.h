@@ -6,7 +6,7 @@
 /*   By: amaaouni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 05:44:10 by amaaouni          #+#    #+#             */
-/*   Updated: 2024/10/02 09:46:51 by amaaouni         ###   ########.fr       */
+/*   Updated: 2024/10/03 23:24:45 by amaaouni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ typedef struct s_path
 	char	**env_to_free;
 }			t_path;
 
-void	simple_cmd(t_tree *root, t_env *env);
+void	simple_cmd(t_tree *root, t_env **env);
 char	**ft_split(char const *s, char c);
 char	*ft_strnstr(const char *haystack, const char *needle, size_t len);
 void	ft_putstr_fd(char *s, int fd);
@@ -42,7 +42,7 @@ void	redirect(char *filename, int mode);
 void	redirect_io(char **arg);
 int		ft_strncmp(const char *s1, const char *s2, size_t n);
 void    ft_echo(char **arg);
-int     ft_cd(char **arg);
+int     ft_cd(char **arg, t_env **env);
 void    ft_pwd(void);
 void    ft_exit(char **arg);
 int env_size(t_env *lst);
@@ -50,6 +50,7 @@ void    env_add_back(t_env **lst, t_env *new_node);
 t_env  *env_last(t_env *lst);
 t_env  *env_new(char *content);
 char **env_to_arr(t_env *env);
-
+void    ft_export(char **arg, t_env **env);
+void	ft_env(t_env *env);
 
 #endif
