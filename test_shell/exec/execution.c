@@ -99,8 +99,8 @@ void	built_cmd(char **arg, char **farg, t_env **env)
 		ft_pwd();
 	if (type == 4)
 		ft_export(farg, env);
-//	if (type == 5)
-//		ft_unset(farg, env);
+	if (type == 5)
+		ft_unset(farg, env);
 	if (type == 6)
 		ft_env(*env);
 	else if (type == 7)

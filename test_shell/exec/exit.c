@@ -63,6 +63,7 @@ int ft_atoi(const char *str)
 
 void	ft_exit(char **arg)
 {
+    arg++;
 	if (!*arg)
 	{
 		ft_putstr_fd("exit\n", 2);

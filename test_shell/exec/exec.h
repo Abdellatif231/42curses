@@ -17,6 +17,7 @@
 # include <fcntl.h>
 # include <sys/wait.h>
 # include <unistd.h>
+#include <limits.h>
 
 typedef struct s_path
 {
@@ -45,12 +46,14 @@ void    ft_echo(char **arg);
 int     ft_cd(char **arg, t_env **env);
 void    ft_pwd(void);
 void    ft_exit(char **arg);
-int env_size(t_env *lst);
-void    env_add_back(t_env **lst, t_env *new_node);
-t_env  *env_last(t_env *lst);
-t_env  *env_new(char *content);
-char **env_to_arr(t_env *env);
+int		env_size(t_env *lst);
+void	env_add_back(t_env **lst, t_env *new_node);
+t_env	*env_last(t_env *lst);
+t_env	*env_new(char *content);
+char	**env_to_arr(t_env *env);
 void    ft_export(char **arg, t_env **env);
 void	ft_env(t_env *env);
+void	ft_unset(char **args, t_env **env);
+char	*std_strjoin(char const *s1, char const *s2);
 
 #endif
