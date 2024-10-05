@@ -6,33 +6,40 @@
 /*   By: amaaouni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 07:09:26 by amaaouni          #+#    #+#             */
-/*   Updated: 2024/10/02 07:52:50 by amaaouni         ###   ########.fr       */
+/*   Updated: 2024/10/05 23:23:11 by amaaouni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "exec.h"
 
-char **env_to_arr(t_env *env)
+int	ft_isalpha(int c)
+{
+	if ((c >= 65 && c <= 90) || (c >= 97 && c <= 122))
+		return (1);
+	return (0);
+}
+
+char	**env_to_arr(t_env *env)
 {
 	char	**arr;
 	int		size;
 	int		i;
 
-    size = env_size(env);
-    arr = malloc((size + 1) * sizeof(char *));
-    if (!arr)
-        return NULL;
-    i = 0;
+	size = env_size(env);
+	arr = malloc((size + 1) * sizeof(char *));
+	if (!arr)
+		return (NULL);
+	i = 0;
 	if (!env)
 		printf("fuck you\n");
-    while (env)
-    {
-        arr[i] = env->env_line;
-        i++;
-        env = env->next;
-    }
-    arr[i] = NULL;
-    return arr;
+	while (env)
+	{
+		arr[i] = env->env_line;
+		i++;
+		env = env->next;
+	}
+	arr[i] = NULL;
+	return (arr);
 }
 
 char	*std_strjoin(char const *s1, char const *s2)
@@ -59,4 +66,12 @@ char	*std_strjoin(char const *s1, char const *s2)
 		ptr[j++] = s2[i++];
 	ptr[j] = '\0';
 	return (ptr);
+}
+
+void	exit_status(int	wstatus, t_glob *glob)
+{
+	if (WIFEXITED(wstatus))
+		glob->status = WEXITSTATUS(wstatus);
+     else if (WIFSIGNALED(wstatus))
+		glob->status = WTERMSIG(wstatus);
 }

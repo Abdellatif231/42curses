@@ -26,18 +26,18 @@ int	free_split(char **arr)
 	return (1);
 }
 
-char *find_path(t_env *env_list)
+char	*find_path(t_env *env_list)
 {
-    char *path;
+	char	*path;
 
-    while (env_list)
-    {
-        path = ft_strnstr(env_list->env_line, "PATH=", 5);
-        if (path)
-            return path;
-        env_list = env_list->next;
-    }
-    return NULL;
+	while (env_list)
+	{
+		path = ft_strnstr(env_list->env_line, "PATH=", 5);
+		if (path)
+			return (path);
+		env_list = env_list->next;
+	}
+	return (NULL);
 }
 
 char	*no_path(char *cmd)
