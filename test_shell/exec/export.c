@@ -6,7 +6,7 @@
 /*   By: amaaouni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/03 12:58:47 by amaaouni          #+#    #+#             */
-/*   Updated: 2024/10/04 16:48:36 by amaaouni         ###   ########.fr       */
+/*   Updated: 2024/10/06 23:48:33 by amaaouni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,8 +92,11 @@ int	rm_exists(t_env **env, char *var)
 	return (res);
 }
 
-void	ft_export(char **arg, t_env **env)
+int	ft_export(char **arg, t_env **env)
 {
+	int	res;
+
+	res = 0;
 	if (!arg[1])
 		print_var(*env);
 	else
@@ -101,7 +104,7 @@ void	ft_export(char **arg, t_env **env)
 		arg++;
 		while (*arg)
 		{
-			if (ft_isalpha(**arg) || **arg == '_')
+			if (check_var(*arg))
 			{
 				if (rm_exists(env, *arg))
 					env_add_back(env, env_new(*arg));
@@ -111,8 +114,10 @@ void	ft_export(char **arg, t_env **env)
 				ft_putstr_fd("export: ", 2);
 				ft_putstr_fd(*arg, 2);
 				ft_putstr_fd(": not a valid identifier\n", 2);
+				res = 1;
 			}
 			arg++;
 		}
 	}
+	return (res);
 }

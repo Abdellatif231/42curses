@@ -6,78 +6,69 @@
 /*   By: amaaouni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/22 07:37:03 by amaaouni          #+#    #+#             */
-/*   Updated: 2024/10/02 09:47:05 by amaaouni         ###   ########.fr       */
+/*   Updated: 2024/10/06 19:10:30 by amaaouni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "exec.h"
 
-int	free_split(char **arr)
+int	xf_ok(char *cmd, char *pathname, t_glob *glob)
 {
-	char	**tmp;
+	struct stat	f_info;
 
-	tmp = arr;
-	while (*tmp)
+	if (access(pathname, F_OK) != 0)
+		return (no_path(cmd, glob));
+	stat(pathname, &f_info);
+	if (S_ISDIR(f_info.st_mode))
+		return (is_dir(cmd, glob));
+	if (access(pathname, X_OK) != 0)
+		return (no_prms(cmd, glob));
+	return (0);
+}
+
+char	*x_path(char *cmd, t_path *path_info, t_glob *glob)
+{
+	path_info->env_paths = ft_split(path_info->path, ':');
+	path_info->env_to_free = path_info->env_paths;
+	while (*path_info->env_paths)
 	{
-		free(*tmp);
-		tmp++;
+		path_info->pathname = exec_strjoin(*path_info->env_paths, cmd);
+		if (access(path_info->pathname, F_OK) == 0)
+		{
+			free_split(path_info->env_to_free);
+			return (path_info->pathname);
+		}
+		free(path_info->pathname);
+		path_info->pathname = NULL;
+		path_info->env_paths++;
 	}
-	free(arr);
-	return (1);
-}
-
-char	*find_path(t_env *env_list)
-{
-	char	*path;
-
-	while (env_list)
-	{
-		path = ft_strnstr(env_list->env_line, "PATH=", 5);
-		if (path)
-			return (path);
-		env_list = env_list->next;
-	}
+	free_split(path_info->env_to_free);
+	no_cmd(cmd, glob);
 	return (NULL);
 }
 
-char	*no_path(char *cmd)
-{
-	ft_putstr_fd(cmd, 2);
-	ft_putstr_fd(": No such file or directory\n", 2);
-	return (NULL);
-}
-
-char	*no_cmd(t_path *va, char *cmd)
-{
-	free_split(va->env_to_free);
-	ft_putstr_fd(cmd, 2);
-	ft_putstr_fd(": command not found\n", 2);
-	return (NULL);
-}
-
-char	*check_path(char *cmd, t_env *ev)
+char	*check_path(char *cmd, t_glob *glob)
 {
 	t_path	path_info;
 
-	path_info.path = find_path(ev);
-	if (!path_info.path || !*path_info.path)
-		return (no_path(cmd));
-	path_info.env_paths = ft_split(path_info.path, ':');
-	path_info.env_to_free = path_info.env_paths;
-	while (*path_info.env_paths)
+	if (ft_strchr(cmd, '/'))
 	{
-		if (!ft_strchr(cmd, '/'))
-			path_info.pathname = exec_strjoin(*path_info.env_paths, cmd);
-		else
-			path_info.pathname = ft_strdup(cmd);
-		if (access(path_info.pathname, X_OK) == 0)
-		{
-			free_split(path_info.env_to_free);
-			return (path_info.pathname);
-		}
-		free(path_info.pathname);
-		path_info.pathname = NULL;
-		path_info.env_paths++;
+		if (xf_ok(cmd, cmd, glob) == 0)
+			return (ft_strdup(cmd));
+		return (NULL);
 	}
-	return (no_cmd(&path_info, cmd));
+	path_info.path = find_path(*glob->env);
+	if (!path_info.path || !*path_info.path)
+	{
+		getcwd(path_info.cwd, sizeof(path_info.cwd));
+		path_info.pathname = exec_strjoin(path_info.cwd, cmd);
+		if (xf_ok(cmd, path_info.pathname, glob) == -1)
+		{
+			free(path_info.pathname);
+			return (NULL);
+		}
+		else
+			return (path_info.pathname);
+	}
+	return (x_path(cmd, &path_info, glob));
 }

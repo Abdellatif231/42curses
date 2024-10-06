@@ -6,7 +6,7 @@
 /*   By: amaaouni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 07:09:26 by amaaouni          #+#    #+#             */
-/*   Updated: 2024/10/05 23:23:11 by amaaouni         ###   ########.fr       */
+/*   Updated: 2024/10/06 22:07:48 by amaaouni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,10 +68,24 @@ char	*std_strjoin(char const *s1, char const *s2)
 	return (ptr);
 }
 
-void	exit_status(int	wstatus, t_glob *glob)
+void	exit_status(int wstatus, t_glob *glob)
 {
 	if (WIFEXITED(wstatus))
-		glob->status = WEXITSTATUS(wstatus);
-     else if (WIFSIGNALED(wstatus))
-		glob->status = WTERMSIG(wstatus);
+		glob->exit_status = WEXITSTATUS(wstatus);
+	else if (WIFSIGNALED(wstatus))
+		glob->exit_status = WTERMSIG(wstatus);
+}
+
+int	free_split(char **arr)
+{
+	char	**tmp;
+
+	tmp = arr;
+	while (*tmp)
+	{
+		free(*tmp);
+		tmp++;
+	}
+	free(arr);
+	return (1);
 }

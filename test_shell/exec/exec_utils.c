@@ -6,7 +6,7 @@
 /*   By: amaaouni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/05 14:19:56 by amaaouni          #+#    #+#             */
-/*   Updated: 2024/10/05 23:19:14 by amaaouni         ###   ########.fr       */
+/*   Updated: 2024/10/06 21:35:35 by amaaouni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,15 +36,21 @@ void	parent_redirect(t_pipe *strc)
 int	left_cmd(t_tree *root, t_glob *glob, t_pipe *strc)
 {
 	if (ft_pipe(strc->fd) == -1)
+	{
+		glob->exit_status = 1;
 		return (-1);
+	}
 	strc->pid = ft_fork();
 	if (strc->pid == -1)
+	{
+		glob->exit_status = 1;
 		return (-1);
+	}
 	if (strc->pid == 0)
 	{
 		child_redirect(strc);
 		pipe_cmd(root, glob);
-		exit(0);
+		exit(glob->exit_status);
 	}
 	else
 		parent_redirect(strc);
@@ -55,13 +61,16 @@ int	right_cmd(t_tree *root, t_glob *glob, t_pipe *strc)
 {
 	strc->pid = ft_fork();
 	if (strc->pid == -1)
+	{
+		glob->exit_status = 1;
 		return (-1);
+	}
 	if (strc->pid == 0)
 	{
 		dup2(strc->prv_fd, 0);
 		close(strc->prv_fd);
 		pipe_cmd(root, glob);
-		exit(0);
+		exit(glob->exit_status);
 	}
 	return (strc->pid);
 }
@@ -78,11 +87,11 @@ void	pipe_cmd(t_tree *root, t_glob *glob)
 	free_split(strc.arg);
 	if (!strc.fltr_arg || !*(strc.fltr_arg))
 		exit(1);
-	strc.path = check_path(*(strc.fltr_arg), *(glob->env));
+	strc.path = check_path(*(strc.fltr_arg), glob);
 	if (!strc.path)
 	{
 		free_split(strc.fltr_arg);
-		exit(1);
+		exit(glob->exit_status);
 	}
 	ft_execve(strc.path, strc.fltr_arg, env_to_arr(*glob->env));
 }

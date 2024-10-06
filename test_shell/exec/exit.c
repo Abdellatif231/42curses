@@ -6,7 +6,7 @@
 /*   By: amaaouni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 09:51:08 by amaaouni          #+#    #+#             */
-/*   Updated: 2024/10/05 19:18:44 by amaaouni         ###   ########.fr       */
+/*   Updated: 2024/10/06 22:47:23 by amaaouni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,13 +61,13 @@ int	ft_atoi(const char *str)
 	return (num * sign);
 }
 
-void	ft_exit(char **arg)
+int	ft_exit(char **arg, int status)
 {
 	arg++;
 	if (!*arg)
 	{
 		ft_putstr_fd("exit\n", 2);
-		exit(0); // you have to exit with the exit_status and not 0
+		exit(status);
 	}
 	if (is_numeric(*arg) && *(arg + 1))
 		ft_putstr_fd("exit: too many arguments\n", 2);
@@ -83,4 +83,5 @@ void	ft_exit(char **arg)
 		ft_putstr_fd("exit\n", 2);
 		exit(ft_atoi(*arg));
 	}
+	return (1);
 }

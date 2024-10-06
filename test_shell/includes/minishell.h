@@ -6,7 +6,7 @@
 /*   By: bbelarra42 <bbelarra@student.1337.ma>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 10:12:34 by bbelarra42        #+#    #+#             */
-/*   Updated: 2024/10/05 22:01:16 by amaaouni         ###   ########.fr       */
+/*   Updated: 2024/10/06 16:49:24 by amaaouni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ typedef struct s_env
 typedef struct s_glob
 {
 	t_env	**env;
-	int		status;
+	int		exit_status;
 }			t_glob;
 
 typedef struct s_append

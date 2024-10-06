@@ -6,7 +6,7 @@
 /*   By: amaaouni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 19:14:32 by amaaouni          #+#    #+#             */
-/*   Updated: 2024/10/05 22:31:18 by amaaouni         ###   ########.fr       */
+/*   Updated: 2024/10/06 22:48:22 by amaaouni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,19 +60,19 @@ void	built_cmd(char **arg, char **fltr_arg, t_glob *glob)
 	redirect_io(arg);
 	type = is_builtin(*fltr_arg);
 	if (type == 1)
-		ft_echo(fltr_arg);
+		glob->exit_status = ft_echo(fltr_arg);
 	if (type == 2)
-		ft_cd(fltr_arg, glob->env);
+		glob->exit_status = ft_cd(fltr_arg, glob->env);
 	if (type == 3)
-		ft_pwd();
+		glob->exit_status = ft_pwd();
 	if (type == 4)
-		ft_export(fltr_arg, glob->env);
+		glob->exit_status = ft_export(fltr_arg, glob->env);
 	if (type == 5)
-		ft_unset(fltr_arg, glob->env);
+		glob->exit_status = ft_unset(fltr_arg, glob->env);
 	if (type == 6)
-		ft_env(*glob->env);
+		glob->exit_status = ft_env(*glob->env);
 	else if (type == 7)
-		ft_exit(fltr_arg);
+		glob->exit_status = ft_exit(fltr_arg, glob->exit_status);
 	dup2(infd, 0);
 	dup2(outfd, 1);
 }

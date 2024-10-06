@@ -6,7 +6,7 @@
 /*   By: bbelarra42 <bbelarra@student.1337.ma>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 10:15:05 by bbelarra42        #+#    #+#             */
-/*   Updated: 2024/10/05 23:20:58 by amaaouni         ###   ########.fr       */
+/*   Updated: 2024/10/06 19:32:37 by amaaouni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int	main(int ac, char *av[], char *env[])
 	t_glob	glob;
 	our_env = env_dup(env);
 	glob.env = &our_env;
-	glob.status = 0;
+	glob.exit_status = 0;
 	while (1)
 		parsing_entry(readline("0xhb_shell$ "), &glob);
 }
@@ -79,7 +79,7 @@ void	parsing_entry(char *parse_string, t_glob *glob)
 
 //	print_tree(root, 0);
 	exec(root, glob);
-	printf("EXIT_STATUS: %d\n", glob->status);
+	printf("EXIT_STATUS: %d\n", glob->exit_status);
 	// link_free(head);
 }
 

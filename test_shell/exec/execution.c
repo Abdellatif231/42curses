@@ -6,7 +6,7 @@
 /*   By: amaaouni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 05:43:46 by amaaouni          #+#    #+#             */
-/*   Updated: 2024/10/05 23:22:17 by amaaouni         ###   ########.fr       */
+/*   Updated: 2024/10/06 22:03:22 by amaaouni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,31 +34,33 @@ void	pipe_sequence(t_tree *root, t_glob *glob)
 		return ;
 	}
 	close(strc.prv_fd);
+	waitpid(strc.pid, &strc.wstatus, 0);
 	while (wait(NULL) > 0)
 		;
+	exit_status(strc.wstatus, glob);
 }
 
 void	exec(t_tree *root, t_glob *glob)
 {
-	if (root && root->word_token == PIPE)
+	if (root->word_token == PIPE)
 		pipe_sequence(root, glob);
 	else
 		simple_cmd(root, glob);
 }
 
-void	execute_cmd(t_cmd *strc, t_env *env)
+void	execute_cmd(t_cmd *strc, t_glob *glob)
 {
 	redirect_io(strc->arg);
 	free_split(strc->arg);
 	if (!strc->fltr_arg || !*(strc->fltr_arg))
 		exit(1);
-	strc->path = check_path(*strc->fltr_arg, env);
+	strc->path = check_path(*strc->fltr_arg, glob);
 	if (!strc->path)
 	{
 		free_split(strc->fltr_arg);
-		exit(1);
+		exit(glob->exit_status);
 	}
-	ft_execve(strc->path, strc->fltr_arg, env_to_arr(env));
+	ft_execve(strc->path, strc->fltr_arg, env_to_arr(*glob->env));
 }
 
 void	simple_cmd(t_tree *root, t_glob *glob)
@@ -72,13 +74,14 @@ void	simple_cmd(t_tree *root, t_glob *glob)
 	strc.pid = ft_fork();
 	if (strc.pid == -1)
 	{
+		glob->exit_status = 1;
 		free_split(strc.arg);
 		free_split(strc.fltr_arg);
 		return ;
 	}
 	if (strc.pid == 0)
-		execute_cmd(&strc, *(glob->env));
-	wait(&strc.wstatus);
+		execute_cmd(&strc, glob);
+	waitpid(strc.pid, &strc.wstatus, 0);
 	exit_status(strc.wstatus, glob);
 	free_split(strc.arg);
 	free_split(strc.fltr_arg);

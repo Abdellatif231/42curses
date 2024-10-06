@@ -6,13 +6,13 @@
 /*   By: amaaouni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 07:45:16 by amaaouni          #+#    #+#             */
-/*   Updated: 2024/10/04 19:22:58 by amaaouni         ###   ########.fr       */
+/*   Updated: 2024/10/06 23:54:41 by amaaouni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "exec.h"
 
-void	ft_echo(char **arg)
+int	ft_echo(char **arg)
 {
 	int	new_line;
 
@@ -32,6 +32,7 @@ void	ft_echo(char **arg)
 	}
 	if (!new_line)
 		printf("\n");
+	return (0);
 }
 
 void	update_env(char *cwd, char *owd, t_env **env)
@@ -70,7 +71,7 @@ int	ft_cd(char **arg, t_env **env)
 		path = arg[1];
 	if (chdir(path) == -1)
 	{
-		perror("chdir");
+		perror("cd");
 		return (1);
 	}
 	getcwd(cwd, sizeof(cwd));
@@ -78,7 +79,7 @@ int	ft_cd(char **arg, t_env **env)
 	return (0);
 }
 
-void	ft_pwd(void)
+int	ft_pwd(void)
 {
 	char	*pwd;
 
@@ -87,12 +88,13 @@ void	ft_pwd(void)
 	{
 		printf("%s\n", pwd);
 		free(pwd);
+		return (0);
 	}
-	else
-		perror("mok");
+	perror("mok");
+	return (1);
 }
 
-void	ft_env(t_env *env)
+int	ft_env(t_env *env)
 {
 	while (env)
 	{
@@ -100,4 +102,5 @@ void	ft_env(t_env *env)
 			printf("%s\n", env->env_line);
 		env = env->next;
 	}
+	return (0);
 }
