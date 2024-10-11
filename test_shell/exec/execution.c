@@ -6,7 +6,7 @@
 /*   By: amaaouni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 05:43:46 by amaaouni          #+#    #+#             */
-/*   Updated: 2024/10/06 22:03:22 by amaaouni         ###   ########.fr       */
+/*   Updated: 2024/10/11 16:31:22 by amaaouni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,18 +42,22 @@ void	pipe_sequence(t_tree *root, t_glob *glob)
 
 void	exec(t_tree *root, t_glob *glob)
 {
-	if (root->word_token == PIPE)
-		pipe_sequence(root, glob);
-	else
-		simple_cmd(root, glob);
+	if (root)
+	{
+		if (root->word_token == PIPE)
+			pipe_sequence(root, glob);
+		else
+			simple_cmd(root, glob);
+	}
 }
 
 void	execute_cmd(t_cmd *strc, t_glob *glob)
 {
-	redirect_io(strc->arg);
+	if (redirect_io(strc->arg))
+		exit(1);
 	free_split(strc->arg);
 	if (!strc->fltr_arg || !*(strc->fltr_arg))
-		exit(1);
+		exit(0);
 	strc->path = check_path(*strc->fltr_arg, glob);
 	if (!strc->path)
 	{

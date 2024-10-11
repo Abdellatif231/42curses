@@ -6,7 +6,7 @@
 /*   By: amaaouni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/05 14:19:56 by amaaouni          #+#    #+#             */
-/*   Updated: 2024/10/06 21:35:35 by amaaouni         ###   ########.fr       */
+/*   Updated: 2024/10/11 23:51:28 by amaaouni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,10 +83,14 @@ void	pipe_cmd(t_tree *root, t_glob *glob)
 	strc.fltr_arg = filter_arg(strc.arg);
 	if (strc.fltr_arg && *(strc.fltr_arg) && is_builtin(*(strc.fltr_arg)))
 		return (built_cmd(strc.arg, strc.fltr_arg, glob));
-	redirect_io(strc.arg);
+	if (redirect_io(strc.arg))
+	{
+		dprintf(1, "mok\n");
+		exit(1);
+	}
 	free_split(strc.arg);
 	if (!strc.fltr_arg || !*(strc.fltr_arg))
-		exit(1);
+		exit(0);
 	strc.path = check_path(*(strc.fltr_arg), glob);
 	if (!strc.path)
 	{

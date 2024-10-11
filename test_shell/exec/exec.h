@@ -6,7 +6,7 @@
 /*   By: amaaouni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 05:44:10 by amaaouni          #+#    #+#             */
-/*   Updated: 2024/10/06 23:31:24 by amaaouni         ###   ########.fr       */
+/*   Updated: 2024/10/11 16:19:36 by amaaouni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,8 +60,8 @@ int			free_split(char **arr);
 int			is_redirction(char *arg);
 char		**filter_arg(char **arg);
 char		**generate_arg(t_tree *root);
-void		redirect(char *filename, int mode);
-void		redirect_io(char **arg);
+int			redirect(char *filename, int mode);
+int			redirect_io(char **arg);
 int			ft_strncmp(const char *s1, const char *s2, size_t n);
 int			ft_echo(char **arg);
 int			ft_cd(char **arg, t_env **env);
@@ -94,5 +94,6 @@ int			no_path(char *cmd, t_glob *glob);
 int			no_cmd(char *cmd, t_glob *glob);
 int			is_dir(char *cmd, t_glob *glob);
 int			check_var(char *arg);
+int			strict_strncmp(char *s1, char *s2);
 
 #endif

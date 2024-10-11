@@ -6,7 +6,7 @@
 /*   By: bbelarra42 <bbelarra@student.1337.ma>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 10:12:34 by bbelarra42        #+#    #+#             */
-/*   Updated: 2024/10/06 16:49:24 by amaaouni         ###   ########.fr       */
+/*   Updated: 2024/10/11 16:49:42 by amaaouni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,4 +150,5 @@ int					ft_strcmp(const char *str1, const char *str2);
 char				*ft_strdup(const char *str);
 
 void				exec(t_tree *root, t_glob *glob);
+void    here_doc(t_token *node, t_glob *glob);
 #endif

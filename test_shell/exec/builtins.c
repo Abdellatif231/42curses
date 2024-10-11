@@ -6,13 +6,13 @@
 /*   By: amaaouni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 19:14:32 by amaaouni          #+#    #+#             */
-/*   Updated: 2024/10/06 22:48:22 by amaaouni         ###   ########.fr       */
+/*   Updated: 2024/10/11 16:29:08 by amaaouni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "exec.h"
 
-static int	strict_strncmp(char *s1, char *s2)
+int	strict_strncmp(char *s1, char *s2)
 {
 	if (ft_strlen(s1) == ft_strlen(s2) && !ft_strncmp(s1, s2, ft_strlen(s2)))
 		return (1);
@@ -49,6 +49,18 @@ int	is_builtin(char *cmd)
 	return (0);
 }
 
+int	check_rdr(char **arg, t_glob *glob, int infd, int outfd)
+{
+	if (redirect_io(arg))
+	{
+		glob->exit_status = 1;
+		dup2(infd, 0);
+		dup2(outfd, 1);
+		return 1;
+	}
+	return 0;
+}
+
 void	built_cmd(char **arg, char **fltr_arg, t_glob *glob)
 {
 	int	infd;
@@ -57,7 +69,8 @@ void	built_cmd(char **arg, char **fltr_arg, t_glob *glob)
 
 	infd = dup(0);
 	outfd = dup(1);
-	redirect_io(arg);
+	if (check_rdr(arg, glob, infd, outfd))
+		return;
 	type = is_builtin(*fltr_arg);
 	if (type == 1)
 		glob->exit_status = ft_echo(fltr_arg);
