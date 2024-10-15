@@ -6,104 +6,77 @@
 /*   By: bbelarra42 <bbelarra@student.1337.ma>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 10:15:40 by bbelarra42        #+#    #+#             */
-/*   Updated: 2024/09/27 11:54:33 by bbelarra42       ###   ########.fr       */
+/*   Updated: 2024/10/15 15:15:18 by amaaouni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-char	*expand(char *env_var, t_env *env, int i)
+char	*expan_helper_1(char *env_var, t_env *env, int i, t_expan *v_exp)
 {
-	char	*search;
-	char	*first_part;
-	char	*second_part;
-	char	*var;
-
-	search = ft_substr(env_var, i + 1, env_length(&env_var[i + 1]));
-	var = ft_strdup(search);
-	if (!env_var[i + ft_strlen(search) + 1] && i != 0)
-	{
-		first_part = ft_substr(env_var, 0, i);
-		search = value_returner(search, env);
-		if (search)
-			return (free(var), free(env_var), ft_strjoin(first_part, search));
-		return (free(var), free(env_var), (first_part));
-	}
-	else if (env_var[i + ft_strlen(search) + 1] && i != 0)
-	{
-		first_part = ft_substr(env_var, 0, i);
-		search = value_returner(search, env);
-		if (search)
-		{
-			second_part = ft_substr(env_var, ft_strlen(first_part)
-					+ ft_strlen(var) + 1, ft_strlen(env_var));
-			return (free(var), free(env_var), ft_strjoin(ft_strjoin(first_part,
-						search), second_part));
-		}
-		second_part = ft_substr(env_var, ft_strlen(first_part) + ft_strlen(var)
-				+ 1, ft_strlen(env_var));
-		return (free(var), free(env_var), ft_strjoin(first_part, second_part));
-	}
-	else if (i == 0 && !env_var[i + ft_strlen(search) + 1])
-	{
-		search = value_returner(search, env);
-		if (search)
-			return (free(var), free(env_var), (search));
-		return (free(var), free(env_var), NULL);
-	}
-	search = value_returner(search, env);
-	first_part = ft_substr(env_var, ft_strlen(var) + 1, ft_strlen(env_var));
-	if (search)
-		return (free(var), free(env_var), ft_strjoin(search, first_part));
-	return (free(var), free(env_var), first_part);
+	v_exp->first_part = ft_substr(env_var, 0, i);
+	v_exp->search = value_returner(v_exp->search, env);
+	if (v_exp->search)
+		return (free(v_exp->var), free(env_var), ft_strjoin(v_exp->first_part,
+				v_exp->search));
+	return (free(v_exp->var), free(env_var), (v_exp->first_part));
 }
 
-void	expand_flager(t_token *head, t_env *env)
+char	*expan_helper_2(char *env_var, t_env *env, int i, t_expan *v_exp)
 {
-	t_token	*current;
-	int		i;
-	char	quote;
-	int		closed;
-	char	*exported;
-	int		flager;
-
-	flager = 0;
-	closed = 1;
-	quote = 0;
-	current = head;
-	while (current)
+	v_exp->first_part = ft_substr(env_var, 0, i);
+	v_exp->search = value_returner(v_exp->search, env);
+	if (v_exp->search)
 	{
-		i = 0;
-		while (current->word[i])
-		{
-			if (current->word[i] == 39 && closed == 1 && current->word[i - 1] != '\\')
-				closed = 0;
-			else
-			{
-				if (current->word[i] == 39 && current->word[i - 1] != '\\')
-					closed = 1;
-			}
-			if ((closed == 1) && current->word[i] == '$'
-				&& current->word[i - 1] != '\\' && current->word[i + 1] != '$')
-			{
-				exported = expand(current->word, env, i);
-				if (!exported)
-				{
-					current->word_token = EMPTY;
-					current->word = ft_strdup("");
-					current = head;
-					flager = 1;
-					break ;
-				}
-				current->word = exported;
-				current = head;
-				flager = 1;
-				break ;
-			}
-			i++;
-		}
-		if (flager == 0)
-			current = current->next;
-		flager = 0;
+		v_exp->second_part = ft_substr(env_var, ft_strlen(v_exp->first_part)
+				+ ft_strlen(v_exp->var) + 1, ft_strlen(env_var));
+		return (free(v_exp->var), free(env_var),
+			ft_strjoin(ft_strjoin(v_exp->first_part, v_exp->search),
+				v_exp->second_part));
+	}
+	v_exp->second_part = ft_substr(env_var, ft_strlen(v_exp->first_part)
+			+ ft_strlen(v_exp->var) + 1, ft_strlen(env_var));
+	return (free(v_exp->var), free(env_var), ft_strjoin(v_exp->first_part,
+			v_exp->second_part));
+}
+
+char	*expand(char *env_var, t_env *env, int i)
+{
+	t_expan	v_exp;
+
+	v_exp.search = ft_substr(env_var, i + 1, env_length(&env_var[i + 1]));
+	v_exp.var = ft_strdup(v_exp.search);
+	if (!env_var[i + ft_strlen(v_exp.search) + 1] && i != 0)
+		return (expan_helper_1(env_var, env, i, &v_exp));
+	else if (env_var[i + ft_strlen(v_exp.search) + 1] && i != 0)
+		return (expan_helper_2(env_var, env, i, &v_exp));
+	else if (i == 0 && !env_var[i + ft_strlen(v_exp.search) + 1])
+	{
+		v_exp.search = value_returner(v_exp.search, env);
+		if (v_exp.search)
+			return (free(v_exp.var), free(env_var), (v_exp.search));
+		return (free(v_exp.var), free(env_var), NULL);
+	}
+	v_exp.search = value_returner(v_exp.search, env);
+	v_exp.first_part = ft_substr(env_var, ft_strlen(v_exp.var) + 1,
+			ft_strlen(env_var));
+	if (v_exp.search)
+		return (free(v_exp.var), free(env_var), ft_strjoin(v_exp.search,
+				v_exp.first_part));
+	return (free(v_exp.var), free(env_var), v_exp.first_part);
+}
+
+void	fla_helper_1(t_token *head, t_env *env, t_fla *var_f)
+{
+	(void)head;
+	(void)env;
+	if (var_f->current->word[var_f->i] == 39 && var_f->closed == 1
+		&& var_f->current->word[var_f->i - 1] != '\\')
+		var_f->closed = 0;
+	else
+	{
+		if (var_f->current->word[var_f->i] == 39
+			&& var_f->current->word[var_f->i - 1] != '\\')
+			var_f->closed = 1;
 	}
 }

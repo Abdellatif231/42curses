@@ -34,3 +34,55 @@ void	append_alloc_cp(t_append *ap, char **string, int delimiter, int i_word)
 				i_word));
 	ap->i++;
 }
+
+t_env	*env_dup(char **env)
+{
+	int		i;
+	t_env	*our_env;
+	t_env	*current;
+	t_env	*new_one;
+
+	our_env = NULL;
+	current = our_env;
+	i = 0;
+	while (env[i])
+	{
+		new_one = new_link(env[i]);
+		if (!our_env)
+		{
+			our_env = new_one;
+			current = new_one;
+		}
+		else
+		{
+			current->next = new_one;
+			current = new_one;
+		}
+		i++;
+	}
+	return (our_env);
+}
+
+int	check_help(char *string, int i, int closed)
+{
+	if (left_redirection_checker(&string[i], &i, closed)
+		|| right_redirection_checker(&string[i], &i, closed)
+		|| pipe_checker(&string[i], &i, closed) || ampersand_checker(&string[i],
+			&i, closed))
+		return (1);
+	return (0);
+}
+
+int	caller(char *string, int y, int *i)
+{
+	while (string[y] == ' ' || string[y] == '>' || !string[y]
+		|| string[y] == '|' || string[y] == '<' || !string[y]
+		|| string[y] == '&')
+	{
+		if (red_helper(string, y))
+			return (1);
+		y++;
+		(*i)++;
+	}
+	return (0);
+}

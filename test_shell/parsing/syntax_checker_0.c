@@ -6,7 +6,7 @@
 /*   By: bbelarra42 <bbelarra@student.1337.ma>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 10:15:50 by bbelarra42        #+#    #+#             */
-/*   Updated: 2024/09/27 12:02:14 by bbelarra42       ###   ########.fr       */
+/*   Updated: 2024/10/15 15:19:33 by amaaouni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,7 @@ int	quotes_red_checker(char *string)
 	closed = 1;
 	while (string[i])
 	{
-		if (left_redirection_checker(&string[i], &i, closed)
-			|| right_redirection_checker(&string[i], &i, closed)
-			|| pipe_checker(&string[i], &i, closed)
-			|| ampersand_checker(&string[i], &i, closed))
+		if (check_help(string, i, closed))
 			return (0);
 		if ((string[i] == 39 || string[i] == 34) && closed == 1)
 		{
@@ -47,6 +44,7 @@ int	ampersand_checker(char *string, int *i, int closed)
 {
 	int	y;
 
+	(void)i;
 	y = 0;
 	if ((closed == 1 && string[y] == '&' && string[y - 1] != '\\'))
 		return (1);
@@ -73,18 +71,8 @@ int	right_redirection_checker(char *string, int *i, int closed)
 		}
 		if (!string[y] || (string[y] == '>' && reset == 2))
 			return (1);
-		while (string[y] == ' ' || string[y] == '>' || !string[y]
-			|| string[y] == '|' || string[y] == '<' || !string[y]
-			|| string[y] == '&')
-		{
-			if ((!string[y]) || (string[y] == '<' && string[y - 1] != '\\')
-				|| (string[y] == '&' && string[y - 1] != '\\')
-				|| (string[y] == '>' && string[y - 1] != '\\')
-				|| (string[y] == '|' && string[y - 1] != '\\'))
-				return (1);
-			y++;
-			(*i)++;
-		}
+		if (caller(string, y, i))
+			return (1);
 	}
 	return (0);
 }

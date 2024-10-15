@@ -6,7 +6,7 @@
 /*   By: bbelarra42 <bbelarra@student.1337.ma>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 10:15:45 by bbelarra42        #+#    #+#             */
-/*   Updated: 2024/09/27 11:43:00 by bbelarra42       ###   ########.fr       */
+/*   Updated: 2024/10/15 15:20:08 by amaaouni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,65 +14,46 @@
 
 t_tree	*parse(t_token *tokens)
 {
-	t_tree	*root;
-	t_tree	*operator_node;
-	t_token	*pipe_operator;
-	t_token	*current_token;
+	t_parse	prs;
 
 	if (!tokens)
 		return (NULL);
-	current_token = tokens;
-	pipe_operator = NULL;
-	root = NULL;
-	while (current_token)
+	prs.current_token = tokens;
+	prs.pipe_operator = NULL;
+	prs.root = NULL;
+	while (prs.current_token)
 	{
-		if (current_token->word_token == PIPE)
+		if (prs.current_token->word_token == PIPE)
 		{
-			pipe_operator = current_token;
+			prs.pipe_operator = prs.current_token;
 			break ;
 		}
-		current_token = current_token->next;
+		prs.current_token = prs.current_token->next;
 	}
-	if (pipe_operator)
+	if (prs.pipe_operator)
 	{
-		root = create_operator_node(pipe_operator);
-		root->left = parse(split_tokens(tokens, pipe_operator));
-		root->right = parse(pipe_operator->next);
+		prs.root = create_operator_node(prs.pipe_operator);
+		prs.root->left = parse(split_tokens(tokens, prs.pipe_operator));
+		prs.root->right = parse(prs.pipe_operator->next);
 	}
 	else
-		root = create_command_subtree(tokens);
-	return (root);
+		prs.root = create_command_subtree(tokens);
+	return (prs.root);
 }
 
 t_tree	*create_command_subtree(t_token *tokens)
 {
 	t_tree	*root;
 	t_tree	*current_node;
-	t_tree	*redirection_node;
 
 	root = NULL;
 	while (tokens)
 	{
-		// if (tokens->word_token == STRING || tokens->word_token == DQ_STRING
-		// 	|| tokens->word_token == SQ_STRING || tokens->word_token == EMPTY)
-		// {
-			current_node = create_tree_node(tokens);
-			if (!root)
-				root = current_node;
-			else
-				link_command_node(root, current_node);
-		// }
-		// else if (tokens->word_token == APP_REDIRECTION
-		// 	|| tokens->word_token == OW_REDIRECTION
-		// 	|| tokens->word_token == IN_OPERATOR
-		// 	|| tokens->word_token == HEREDOC)
-		// {
-		// 	current_node = create_tree_node(tokens);
-		// 	if (!root)
-		// 		root = current_node;
-		// 	else
-		// 		link_command_node(root, current_node);
-		// }
+		current_node = create_tree_node(tokens);
+		if (!root)
+			root = current_node;
+		else
+			link_command_node(root, current_node);
 		tokens = tokens->next;
 	}
 	return (root);
