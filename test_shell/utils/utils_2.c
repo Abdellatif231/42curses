@@ -58,8 +58,10 @@ int	env_length(char *env)
 	int	i;
 
 	i = 0;
+	if (env[0] == '?')
+		return (1);
 	while (env[i] && env[i] != 32 && env[i] != '$' && env[i] != 34
-		&& env[i] != 39 && env[i] != '=' && env[i] != '\\' && env[i] != '.'
+		&& env[i] != 39 && env[i] != '=' && env[i] != '.'
 		&& env[i] != '/' && env[i] != ';' && env[i] != '%')
 		i++;
 	return (i);
@@ -77,13 +79,15 @@ char	*exporter(char *search, char *env_line)
 	return (NULL);
 }
 
-char	*value_returner(char *search, t_env *env)
+char	*value_returner(char *search, t_env *env, t_glob *glob)
 {
 	char	*exported;
 	t_env	*current;
 
 	current = env;
 	exported = NULL;
+	if (!ft_strcmp(search, "?"))
+		return (free(search), ft_itoa(glob->exit_status));
 	while (current)
 	{
 		exported = exporter(search, current->env_line);

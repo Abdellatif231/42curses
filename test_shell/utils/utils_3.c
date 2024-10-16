@@ -6,7 +6,7 @@
 /*   By: bbelarra42 <bbelarra@student.1337.ma>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 13:09:15 by bbelarra42        #+#    #+#             */
-/*   Updated: 2024/09/27 13:12:01 by bbelarra42       ###   ########.fr       */
+/*   Updated: 2024/10/15 23:37:34 by bbelarra42       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,4 +85,15 @@ int	caller(char *string, int y, int *i)
 		(*i)++;
 	}
 	return (0);
+}
+
+void	free_tree(t_tree *node)
+{
+	if (!node)
+		return ;
+	free_tree(node->left);
+	free_tree(node->right);
+	if (node->word)
+		free(node->word);
+	free(node);
 }

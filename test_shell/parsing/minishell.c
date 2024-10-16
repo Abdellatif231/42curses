@@ -6,47 +6,15 @@
 /*   By: bbelarra42 <bbelarra@student.1337.ma>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 10:15:05 by bbelarra42        #+#    #+#             */
-/*   Updated: 2024/10/15 16:28:58 by amaaouni         ###   ########.fr       */
+/*   Updated: 2024/10/15 23:37:28 by bbelarra42       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int	g_var = 0;
+int		g_var = 0;
 
-void free_tree(t_tree *node)
-{
-    if (!node)
-        return;
-    if (node->word)
-        free(node->word);
-    free_tree(node->left);
-    free_tree(node->right);
-    free(node);
-}
-
-void	leaks(void)
-{
-	system("leaks minishell");
-}
-
-int	main(int ac, char *av[], char *env[])
-{
-	t_env	*our_env;
-	t_glob	glob;
-	
-//	atexit(leaks);
-	(void)ac;
-	(void)av;
-	our_env = env_dup(env);
-	glob.env = &our_env;
-	glob.exit_status = 0;
-	setup_main_signals();
-	while (1)
-		parsing_entry(readline("0xhb_shell$ "), &glob);
-}
-
-void	parsing_entry(char *parse_string, t_glob *glob)
+t_tree	*parsing_entry(char *parse_string, t_glob *glob)
 {
 	t_entry	var_ent;
 
@@ -56,30 +24,22 @@ void	parsing_entry(char *parse_string, t_glob *glob)
 	else if (syntax_checker(parse_string))
 	{
 		printf("syntax error\n");
-		glob->exit_status = 25;
+		glob->exit_status = 2;
 		free(parse_string);
-		return ;
+		return (NULL);
 	}
-	var_ent.organized_input = input_organizer(parse_string);
-	var_ent.head = lexer(var_ent.organized_input);
-	var_ent.prev = dup_head(var_ent.head);
-	expand_flager(var_ent.head, *glob->env);
-	content_trima(var_ent.head);
-	here_doc(var_ent.head, glob, var_ent.prev);
+	entry_helper(&var_ent, glob, parse_string);
 	if (g_var)
 	{
 		free(parse_string);
-		printf("EXIT_STATUS: %d\n", glob->exit_status);
-		return ;
+		link_free(var_ent.head);
+		link_free(var_ent.prev);
+		return (NULL);
 	}
-	var_ent.root = parse(var_ent.head);
-	exec(var_ent.root, glob);
-	printf("EXIT_STATUS: %d\n", glob->exit_status);
-	// unlink("/tmp/");
-	free_tree(var_ent.root);
+	var_ent.root = parse(var_ent.head, 0);
 	link_free(var_ent.head);
 	link_free(var_ent.prev);
-	free(parse_string);
+	return (var_ent.root);
 }
 
 int	trim_flager(char *string)
@@ -89,7 +49,7 @@ int	trim_flager(char *string)
 	i = 0;
 	while (string[i])
 	{
-		if (string[i] == 34 || string[i] == 39 || string[i] == '\\')
+		if (string[i] == 34 || string[i] == 39)
 			return (1);
 		i++;
 	}
@@ -99,7 +59,9 @@ int	trim_flager(char *string)
 void	content_trima(t_token *head)
 {
 	t_trim	trim;
+	char	c;
 
+	c = 0;
 	trim.closed = 1;
 	trim.i = 0;
 	trim.current = head;
@@ -112,7 +74,7 @@ void	content_trima(t_token *head)
 			trim.trimed = malloc(ft_strlen(trim.current->word) + 1);
 			while (trim.current->word[trim.i])
 			{
-				trim_whiler(&trim);
+				trim_whiler(&trim, &c);
 				trim.i++;
 			}
 			trim.trimed[trim.y] = '\0';

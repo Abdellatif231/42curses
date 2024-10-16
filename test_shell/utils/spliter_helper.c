@@ -6,7 +6,7 @@
 /*   By: bbelarra42 <bbelarra@student.1337.ma>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 13:31:23 by bbelarra42        #+#    #+#             */
-/*   Updated: 2024/10/15 15:18:45 by amaaouni         ###   ########.fr       */
+/*   Updated: 2024/10/15 23:35:52 by bbelarra42       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,7 @@ void	fill_helper(t_splvar *sv, int delimiter, char **substring,
 	{
 		if (s[sv->y] == delimiter && sv->closed == 1)
 			break ;
-		if ((s[sv->y] == 39 || s[sv->y] == 34) && sv->closed == 1 && s[sv->y
-				- 1] != '\\')
+		if ((s[sv->y] == 39 || s[sv->y] == 34) && sv->closed == 1)
 		{
 			sv->closed = 0;
 			sv->quote = s[sv->y];
@@ -43,8 +42,7 @@ void	count_helper(t_splvar *sv, char const *s, char delimiter)
 		{
 			while (s[sv->i] && s[sv->i] != delimiter)
 			{
-				if ((s[sv->i] == 39 || s[sv->i] == 34) && sv->closed == 1
-					&& s[sv->i - 1] != '\\')
+				if ((s[sv->i] == 39 || s[sv->i] == 34) && sv->closed == 1)
 				{
 					sv->closed = 0;
 					sv->quote = s[sv->i];
@@ -70,39 +68,31 @@ void	seter(t_trim *trim)
 		trim->closed = 1;
 }
 
-void	trim_whiler(t_trim *trim)
+void	trim_whiler(t_trim *trim, char *c)
 {
-	if ((trim->current->word[trim->i] == 39) && trim->closed == 1
-		&& trim->current->word[trim->i - 1] != '\\')
-		trim->closed = 0;
-	else
-		seter(trim);
-	if ((trim->current->word[trim->i] != '\\'
-			&& trim->current->word[trim->i] != 39)
-		|| (trim->current->word[trim->i] == 39 && trim->current->word[trim->i
-				- 1] == '\\'))
+	if ((trim->current->word[trim->i] == 39
+			|| trim->current->word[trim->i] == 34)
+		&& trim->closed == 1)
 	{
-		if ((trim->current->word[trim->i] == 34) && trim->closed == 0)
-		{
-			trim->trimed[trim->y] = trim->current->word[trim->i];
-			trim->y++;
-		}
-		else if (trim->current->word[trim->i] != 34
-			|| (trim->current->word[trim->i] == 39 && trim->current->word[trim->i
-				- 1] == '\\'))
-		{
-			trim->trimed[trim->y] = trim->current->word[trim->i];
-			trim->y++;
-		}
+		*c = trim->current->word[trim->i];
+		trim->closed = 0;
+		trim->i++;
+	}
+	if (trim->current->word[trim->i] == *c)
+		trim->closed = 1;
+	if ((trim->closed == 0 || *c == 0)
+		|| (trim->current->word[trim->i] != 39
+			&& trim->current->word[trim->i] != 34))
+	{
+		trim->trimed[trim->y] = trim->current->word[trim->i];
+		trim->y++;
 	}
 }
 
 int	red_helper(char *string, int y)
 {
-	if ((!string[y]) || (string[y] == '<' && string[y - 1] != '\\')
-		|| (string[y] == '&' && string[y - 1] != '\\') || (string[y] == '>'
-			&& string[y - 1] != '\\') || (string[y] == '|' && string[y
-				- 1] != '\\'))
+	if (!string[y] || string[y] == '<'
+		|| string[y] == '&' || string[y] == '>' || string[y] == '|')
 		return (1);
 	return (0);
 }

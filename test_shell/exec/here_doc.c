@@ -6,7 +6,7 @@
 /*   By: amaaouni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 18:57:15 by amaaouni          #+#    #+#             */
-/*   Updated: 2024/10/15 15:42:16 by amaaouni         ###   ########.fr       */
+/*   Updated: 2024/10/16 16:35:01 by amaaouni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void	sub_prs(t_token *node, t_glob *glob, char *file, t_token *prev)
 		if (strict_strncmp(node->next->word, line))
 			break ;
 		if (!expand_triger(prev->next->word))
-			line = heredoc_expand(line, *glob->env);
+			line = heredoc_expand(line, *glob->env, glob);
 		new_line = add_char(line, '\n');
 		ft_putstr_fd(new_line, fd);
 		free(new_line);
