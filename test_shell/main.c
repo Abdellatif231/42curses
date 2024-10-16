@@ -6,7 +6,7 @@
 /*   By: bbelarra42 <bbelarra@student.1337.ma>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 10:15:40 by bbelarra42        #+#    #+#             */
-/*   Updated: 2024/10/16 22:33:40 by amaaouni         ###   ########.fr       */
+/*   Updated: 2024/10/17 00:03:54 by amaaouni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,24 @@
 void	leaks(void)
 {
 	system("leaks minishell");
+}
+
+void	clear_files(void)
+{
+	char	*file;
+	int		c;
+
+	file = ft_strdup("/tmp/.HeRe_DoC");
+	c = 'a';
+	while (1)
+	{
+		if (access(file, F_OK) != 0)
+			break ;
+		unlink(file);
+		file = add_char(file, c);
+		c++;
+	}
+	free(file);
 }
 
 int	main(int ac, char *av[], char *env[])
@@ -38,7 +56,7 @@ int	main(int ac, char *av[], char *env[])
 		if (root)
 		{
 			exec(root, &glob);
-			unlink("/tmp/");
+			clear_files();
 			free(line);
 			free_tree(root);
 		}

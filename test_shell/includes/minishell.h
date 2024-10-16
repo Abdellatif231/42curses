@@ -6,7 +6,7 @@
 /*   By: bbelarra42 <bbelarra@student.1337.ma>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 10:12:34 by bbelarra42        #+#    #+#             */
-/*   Updated: 2024/10/16 19:34:21 by amaaouni         ###   ########.fr       */
+/*   Updated: 2024/10/16 23:46:02 by amaaouni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -218,4 +218,5 @@ void				main_sigint(int sigint);
 void				reset_signals(void);
 void				hdoc_signals(void);
 void				rl_replace_line(const char *string, int clear_undo);
+char				*add_char(char *line, char c);
 #endif

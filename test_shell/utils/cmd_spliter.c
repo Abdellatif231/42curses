@@ -6,7 +6,7 @@
 /*   By: bbelarra42 <bbelarra@student.1337.ma>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 10:16:04 by bbelarra42        #+#    #+#             */
-/*   Updated: 2024/09/27 13:41:50 by bbelarra42       ###   ########.fr       */
+/*   Updated: 2024/10/16 23:52:57 by amaaouni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ static size_t	substring_len(char const *s, char delimiter)
 	{
 		if (s[i] == delimiter && closed == 1)
 			break ;
-		if ((s[i] == 39 || s[i] == 34) && closed == 1 && s[i - 1] != '\\')
+		if ((s[i] == 39 || s[i] == 34) && closed == 1)
 		{
 			closed = 0;
 			quote = s[i];
