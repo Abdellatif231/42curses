@@ -6,16 +6,11 @@
 /*   By: bbelarra42 <bbelarra@student.1337.ma>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 10:15:40 by bbelarra42        #+#    #+#             */
-/*   Updated: 2024/10/17 00:03:54 by amaaouni         ###   ########.fr       */
+/*   Updated: 2024/10/17 00:23:56 by amaaouni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "includes/minishell.h"
-
-void	leaks(void)
-{
-	system("leaks minishell");
-}
 
 void	clear_files(void)
 {
@@ -42,7 +37,6 @@ int	main(int ac, char *av[], char *env[])
 	char	*line;
 	t_tree	*root;
 
-//	atexit(leaks);
 	(void)ac;
 	(void)av;
 	our_env = env_dup(env);
